@@ -10,6 +10,7 @@ public class RentalLogService {
     private final RentalLogRepository rentalLogRepository;
 
     public RentalLogService(RentalLogRepository rentalLogRepository) {
+
         this.rentalLogRepository = rentalLogRepository;
     }
 
