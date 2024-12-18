@@ -5,6 +5,7 @@ import lombok.Getter;
 
 @Entity
 @Getter
+@Cacheable
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

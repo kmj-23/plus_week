@@ -2,6 +2,8 @@ package com.example.demo.service;
 
 import com.example.demo.entity.User;
 import com.example.demo.repository.UserRepository;
+
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +19,7 @@ public class AdminService {
 
     // TODO: 4. find or save 예제 개선
     @Transactional
+    @Cacheable(value = "adminCache", key ="#userIds")
     public void reportUsers(List<Long> userIds) {
         for (Long userId : userIds) {
             User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 ID에 맞는 값이 존재하지 않습니다."));
