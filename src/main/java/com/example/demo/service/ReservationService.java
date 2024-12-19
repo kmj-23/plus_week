@@ -104,25 +104,25 @@ public class ReservationService {
 
     // TODO: 7. 리팩토링
     @Transactional
-    public void updateReservationStatus(Long reservationId, String status) {
+    public void updateReservationStatus(Long reservationId, Status status) {
         Reservation reservation = reservationRepository.findByIdOrElseThrow(reservationId);
 
         switch (status) {
-            case "APPROVED":
+            case APPROVED:
                 if(!PENDING.equals(reservation.getStatus())) {
                     throw new IllegalArgumentException("PENDING 상태만 APPROVED로 변경 가능합니다.");
                 }
-                reservation.updateStatus(PENDING);
+                reservation.updateStatus(APPROVED);
                 break;
 
-            case "CANCELED":
+            case CANCELED:
                 if(EXPIRED.equals(reservation.getStatus())) {
                     throw new IllegalArgumentException("EXPIRED 상태인 예약은 취소할 수 없습니다.");
                 }
-                reservation.updateStatus(EXPIRED);
+                reservation.updateStatus(CANCELED);
                 break;
 
-            case "EXPIRED":
+            case EXPIRED:
                 if(!PENDING.equals(reservation.getStatus())) {
                     throw new IllegalArgumentException("PENDING 상태만 EXPIRED로 변경 가능합니다.");
                 }
