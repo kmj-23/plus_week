@@ -20,7 +20,6 @@ public class Reservation {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-//    private Long userId;
 
     private LocalDateTime startAt;
 

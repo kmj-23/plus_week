@@ -1,10 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.ReservationResponseDto;
-import com.example.demo.entity.Item;
-import com.example.demo.entity.RentalLog;
-import com.example.demo.entity.Reservation;
-import com.example.demo.entity.User;
+import com.example.demo.entity.*;
 import com.example.demo.repository.ItemRepository;
 import com.example.demo.repository.ReservationRepository;
 import com.example.demo.repository.UserRepository;
@@ -14,8 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.example.demo.entity.Status.EXPIRED;
-import static com.example.demo.entity.Status.PENDING;
+import static com.example.demo.entity.Status.*;
 
 
 @Service
@@ -44,8 +40,8 @@ public class ReservationService {
 //            throw new ReservationConflictException("해당 물건은 이미 그 시간에 예약이 있습니다.");
 //        }
 
-        Item item = itemRepository.findById(itemId).orElseThrow(() -> new IllegalArgumentException("해당 ID에 맞는 값이 존재하지 않습니다."));
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 ID에 맞는 값이 존재하지 않습니다."));
+        Item item = itemRepository.findByIdOrElseThrow(itemId);
+        User user = userRepository.findByIdOrElseThrow(userId);
         Reservation reservation = new Reservation(item, user, PENDING, startAt, endAt);
         Reservation savedReservation = reservationRepository.save(reservation);
 
@@ -109,7 +105,7 @@ public class ReservationService {
     // TODO: 7. 리팩토링
     @Transactional
     public void updateReservationStatus(Long reservationId, String status) {
-        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(() -> new IllegalArgumentException("해당 ID에 맞는 데이터가 존재하지 않습니다."));
+        Reservation reservation = reservationRepository.findByIdOrElseThrow(reservationId);
 
         switch (status) {
             case "APPROVED":
@@ -119,7 +115,7 @@ public class ReservationService {
                 reservation.updateStatus(PENDING);
                 break;
 
-            case "CANCELLED":
+            case "CANCELED":
                 if(EXPIRED.equals(reservation.getStatus())) {
                     throw new IllegalArgumentException("EXPIRED 상태인 예약은 취소할 수 없습니다.");
                 }

@@ -22,7 +22,7 @@ public class AdminService {
     @Cacheable(value = "adminCache", key ="#userIds")
     public void reportUsers(List<Long> userIds) {
         for (Long userId : userIds) {
-            User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 ID에 맞는 값이 존재하지 않습니다."));
+            User user = userRepository.findByIdOrElseThrow(userId);
 
             user.updateStatusToBlocked();
 
